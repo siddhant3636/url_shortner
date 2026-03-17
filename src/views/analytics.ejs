@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - <%= urlData.shortCode %></title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/analytics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+    
+    <div class="container"></div>
+
+    <%- include("partials/navbar") %>
+
+    <div class="analytics-container">
+        <div class="header-section">
+            <h1 class="bangers-regular">Performance <span>Analytics</span></h1>
+    
+            <a href="<%= urlData.originalUrl %>" target="_blank" class="original-url-link">
+                <%= urlData.originalUrl %>
+            </a>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3 class="card-title">Total Lifetime Clicks</h3>
+                <div class="stat-huge"><%= urlData.clicks %></div>
+                <p style="color: #00ff41; margin: 0;">+ Active Status</p>
+            </div>
+
+            <div class="card full-width">
+                <h3 class="card-title">Traffic (Last 7 Days)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Device Breakdown</h3>
+                <div class="chart-wrapper">
+                    <canvas id="deviceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Top Locations</h3>
+                <div class="chart-wrapper">
+                    <canvas id="countryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+     window.chartData = JSON.parse('<%- chartData || "{}" %>');
+    </script>
+
+    <script src="/js/chart.js"></script>
+    <script src="/js/sidebar.js"></script>
+</body>
+</html>

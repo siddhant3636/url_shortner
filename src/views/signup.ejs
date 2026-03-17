@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signup</title>
+  <link rel="stylesheet" href="/css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<form class="form" id="signupForm">
+
+  <span class="input-span">
+    <label for="username" class="label">Username</label>
+    <input type="text" name="username" id="username" required autocomplete="off" />
+  </span>
+
+  <span class="input-span">
+    <label for="email" class="label">Email</label>
+    <input type="email" name="email" id="email" required />
+  </span>
+
+  <span class="input-span">
+    <label for="password" class="label">Password</label>
+    <input type="password" name="password" id="password" required />
+  </span>
+
+  <input class="submit" type="submit" id="submitBtn" value="Sign up" />
+
+  <span class="span">
+    Already have an account? <a href="/api/auth/login">Log in</a>
+  </span>
+
+</form>
+
+<script>
+    // 1. THE TOAST NOTIFICATION GENERATOR
+    window.showToast = function(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `cyber-toast ${type}`;
+        toast.innerText = message;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeOutUp 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
+
+    // 2. REAL-TIME USERNAME CHECKER
+    const usernameInput = document.getElementById('username');
+    const submitBtn = document.getElementById('submitBtn');
+    let typingTimer;
+
+    usernameInput.addEventListener('input', (e) => {
+        clearTimeout(typingTimer);
+        const val = e.target.value.trim();
+        
+        if (!val) {
+            usernameInput.style.borderColor = "";
+            usernameInput.style.boxShadow = "none";
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+            return;
+        }
+
+        typingTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/api/auth/check-username?username=${val}`);
+                const data = await res.json();
+                
+                if (!data.available) {
+                    showToast("Username already taken in the network.", "warning");
+                    usernameInput.style.borderColor = "#ffeb3b";
+                    usernameInput.style.boxShadow = "0 0 10px rgba(255, 235, 59, 0.3)";
+                    
+                    // Lock the submit button!
+                    submitBtn.disabled = true; 
+                    submitBtn.style.opacity = "0.5";
+                    submitBtn.style.cursor = "not-allowed";
+                } else {
+                    usernameInput.style.borderColor = "#00ff41";
+                    usernameInput.style.boxShadow = "0 0 10px rgba(0, 255, 65, 0.3)";
+                    
+                    // Unlock the submit button!
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                    submitBtn.style.cursor = "pointer";
+                }
+            } catch (err) {
+                console.error("Check failed");
+            }
+        }, 500);
+    });
+
+    // 3. HIJACK THE FORM SUBMISSION
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Stop standard HTML submission
+        
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        // Visual feedback that it's processing
+        submitBtn.value = "Registering node...";
+        submitBtn.style.opacity = "0.7";
+
+        try {
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            
+            // Because your backend returns res.redirect("/") on success, 
+            // fetch automatically follows it. We can check if it redirected!
+            if (response.redirected) {
+                window.location.href = response.url; // Force the browser to go to the new page
+                return;
+            }
+
+            // If we didn't redirect, it means we hit an error (like 400 Bad Request)
+            const data = await response.json();
+            if (!response.ok) {
+                showToast(data.message || "Registration failed.", "error");
+                submitBtn.value = "Sign up";
+                submitBtn.style.opacity = "1";
+            }
+        } catch (err) {
+            showToast("Server connection lost.", "error");
+            submitBtn.value = "Sign up";
+            submitBtn.style.opacity = "1";
+        }
+    });
+</script>
+
+</body>
+</html>

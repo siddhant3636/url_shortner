@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Override | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+
+</head>
+<body>
+    
+    
+    <div class="admin-header">
+        <h1>SYSTEM <span>OVERRIDE</span></h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span style="color: #888;">Logged in as <span style="color: #ffeb3b;"><%= user.username %></span></span>
+            <a href="/" class="btn-exit">Return to Matrix</a>
+        </div>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <h3>Registered Nodes (Users)</h3>
+            <p class="value"><%= stats.users-1 %></p>
+        </div>
+        <div class="metric-card">
+            <h3>Active Connections (URLs)</h3>
+            <p class="value"><%= stats.urls %></p>
+        </div>
+        <div class="metric-card">
+            <h3>Total Network Traffic</h3>
+            <p class="value"><%= stats.clicks %></p>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-header">
+            <h2>Live Data Stream (Recent URLs)</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Short Code</th>
+                    <th>Target URL</th>
+                    <th>Creator</th>
+                    <th>Clicks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (recentUrls && recentUrls.length > 0) { %>
+                    <% recentUrls.forEach(url => { %>
+                       <tr id="row-<%= url._id %>" class="data-row" 
+    <% 
+        // 1. Calculate the neon color strictly for the short URL
+        const userSeed = url.createdBy ? url.createdBy.username : 'anon';
+        const hue = (userSeed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 360;
+        const userColor = `hsl(${hue}, 80%, 70%)`; 
+    %>
+    style="--url-neon-color: <%= userColor %>;">
+
+    <td class="short-code">
+        <a href="/api/url/<%= url.shortCode %>" 
+           target="_blank" 
+           style="color: var(--url-neon-color); text-shadow: 0 0 5px rgba(255,255,255,0.1);">
+           /<%= url.shortCode %>
+        </a>
+    </td>
+
+    <td class="target-url">
+        <a href="<%= url.originalUrl %>" target="_blank" title="<%= url.originalUrl %>" style="color: #aaa; text-decoration: none;">
+            <%= url.originalUrl %>
+        </a>
+    </td>
+
+    <td class="creator">
+        <div class="creator-wrapper">
+            <span class="username-text" style="color: #ffeb3b; font-weight: bold;">
+                @<%= url.createdBy ? url.createdBy.username : 'Unknown' %>
+            </span>
+            
+            <% if (url.createdBy && url.createdBy._id.toString() !== user.id) { %>
+                <button class="deleteButton" onclick="terminateUser('<%= url.createdBy._id %>', '<%= url.createdBy.username %>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 50 59" class="bin">
+                        <path fill="#B5BAC1" d="M0 7.5C0 5.01472 2.01472 3 4.5 3H45.5C47.9853 3 50 5.01472 50 7.5V7.5C50 8.32843 49.3284 9 48.5 9H1.5C0.671571 9 0 8.32843 0 7.5V7.5Z"></path>
+                        <path fill="#B5BAC1" d="M17 3C17 1.34315 18.3431 0 20 0H29.3125C30.9694 0 32.3125 1.34315 32.3125 3V3H17V3Z"></path>
+                        <path fill="#B5BAC1" d="M2.18565 18.0974C2.08466 15.821 3.903 13.9202 6.18172 13.9202H43.8189C46.0976 13.9202 47.916 15.821 47.815 18.0975L46.1699 55.1775C46.0751 57.3155 44.314 59.0002 42.1739 59.0002H7.8268C5.68661 59.0002 3.92559 57.3155 3.83073 55.1775L2.18565 18.0974ZM18.0003 49.5402C16.6196 49.5402 15.5003 48.4209 15.5003 47.0402V24.9602C15.5003 23.5795 16.6196 22.4602 18.0003 22.4602C19.381 22.4602 20.5003 23.5795 20.5003 24.9602V47.0402C20.5003 48.4209 19.381 49.5402 18.0003 49.5402ZM29.5003 47.0402C29.5003 48.4209 30.6196 49.5402 32.0003 49.5402C33.381 49.5402 34.5003 48.4209 34.5003 47.0402V24.9602C34.5003 23.5795 33.381 22.4602 32.0003 22.4602C30.6196 22.4602 29.5003 23.5795 29.5003 24.9602V47.0402Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                        <path fill="#B5BAC1" d="M2 13H48L47.6742 21.28H2.32031L2 13Z"></path>
+                    </svg>
+                    <span class="tooltip">Terminate Node</span>
+                </button>
+            <% } %>
+        </div>
+    </td>
+
+    <td><span class="click-badge"><%= url.clicks %></span></td>
+
+    <td>
+        <button class="btn-kill-container" onclick="deleteAdminLink('<%= url._id %>')">
+            <span class="text">Kill</span>
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+                </svg>
+            </span>
+        </button>
+    </td>
+</tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #888;">No active connections found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/admin.js"></script>
+
+</body>
+</html>

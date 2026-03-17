@@ -1,0 +1,292 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a1a;
+  font-family: Arial, Helvetica, sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.form {
+  --bg-light: #efefef;
+  --bg-dark: #707070;
+  --clr: #58bc82;
+  --clr-alpha: #9c9c9c60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.form .input-span {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input[type="email"],
+.form input[type="text"],
+.form input[type="password"] {
+  border-radius: 0.5rem;
+  padding: 1rem 0.75rem;
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--clr-alpha);
+  outline: 2px solid var(--bg-dark);
+}
+
+.form input[type="email"]:focus,
+.form input[type="text"]:focus,
+.form input[type="password"]:focus {
+  outline: 2px solid var(--clr);
+}
+
+.label {
+  align-self: flex-start;
+  color: var(--clr);
+  font-weight: 600;
+}
+
+.form .submit {
+  padding: 1rem 0.75rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 3rem;
+  background-color: var(--bg-dark);
+  color: var(--bg-light);
+  border: none;
+  cursor: pointer;
+  transition: all 300ms;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form .submit:hover {
+  background-color: var(--clr);
+  color: var(--bg-dark);
+}
+
+.span {
+  text-decoration: none;
+  color: var(--bg-dark);
+}
+
+.span a {
+  color: var(--clr);
+}
+
+/* 🚀 THE CYBER TOAST NOTIFICATION SYSTEM */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: none; 
+}
+
+.cyber-toast {
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    padding: 16px 24px;
+    border-radius: 4px;
+    border-left: 4px solid;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    animation: slideInRight 0.3s ease-out forwards;
+    min-width: 250px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-toast.success { border-color: #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+.cyber-toast.success::before { content: "SYS.MSG // "; color: #00ff41; font-weight: bold; font-family: monospace;}
+
+.cyber-toast.warning { border-color: #ffeb3b; box-shadow: 0 0 15px rgba(255, 235, 59, 0.2); }
+.cyber-toast.warning::before { content: "WARNING // "; color: #ffeb3b; font-weight: bold; font-family: monospace;}
+
+.cyber-toast.error { border-color: #ff003c; box-shadow: 0 0 15px rgba(255, 0, 60, 0.2); }
+.cyber-toast.error::before { content: "CRITICAL // "; color: #ff003c; font-weight: bold; font-family: monospace;}
+
+@keyframes slideInRight {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutUp {
+    to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* =========================================
+    ADMIN SECURE LOGIN - LIGHTSABER ANIMATION
+   ========================================= */
+#loader {
+  width: 80px;
+  height: 40px;
+  position: relative;
+  /* 🚀 Increased margins so the bigger swords don't hit your text */
+  margin: 20px auto 25px auto; 
+  z-index: 1000;
+  
+  /* 🚀 THE MAGIC WAND: This magnifies the entire battle! */
+  transform: scale(1.8); 
+}
+.lightsaber {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  background-color: #666;
+  border-radius: 1px;
+  bottom: 0;
+}
+
+.lightsaber.ls-left { left: 0; }
+.lightsaber.ls-right { right: 0; }
+
+.lightsaber:before {
+  position: absolute;
+  content: ' ';
+  display: block;
+  width: 2px;
+  height: 25px;
+  max-height: 1px;
+  left: 1px;
+  top: 1px;
+  background-color: #fff;
+  border-radius: 1px;
+  -webkit-transform: rotateZ(180deg);
+  transform: rotateZ(180deg);
+  -webkit-transform-origin: center top;
+  -ms-transform-origin: center top;
+  transform-origin: center top;
+}
+
+.lightsaber:after {
+  position: absolute;
+  content: ' ';
+  display: block;
+  width: 2px;
+  height: 2px;
+  left: 1px;
+  top: 4px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.ls-particles {
+  position: absolute;
+  left: 42px;
+  top: 10px;
+  width: 1px;
+  height: 5px;
+  background-color: rgb(51, 51, 51, 0);
+  -webkit-transform: rotateZ(0deg);
+  transform: rotateZ(0deg);
+}
+
+.lightsaber.ls-green:before {
+  -webkit-animation: showlightgreen 2s ease-in-out infinite 1s;
+  animation: showlightgreen 2s ease-in-out infinite 1s;
+}
+
+.lightsaber.ls-red:before {
+  -webkit-animation: showlightred 2s ease-in-out infinite 1s;
+  animation: showlightred 2s ease-in-out infinite 1s;
+}
+
+.lightsaber.ls-left {
+  -webkit-animation: fightleft 2s ease-in-out infinite 1s;
+  animation: fightleft 2s ease-in-out infinite 1s;
+}
+
+.lightsaber.ls-right {
+  -webkit-animation: fightright 2s ease-in-out infinite 1s;
+  animation: fightright 2s ease-in-out infinite 1s;
+}
+
+.ls-particles.ls-part-1 { animation: particles1 2s ease-out infinite 1s; }
+.ls-particles.ls-part-2 { animation: particles2 2s ease-out infinite 1s; }
+.ls-particles.ls-part-3 { animation: particles3 2s ease-out infinite 1s; }
+.ls-particles.ls-part-4 { animation: particles4 2s ease-out infinite 1s; }
+.ls-particles.ls-part-5 { animation: particles5 2s ease-out infinite 1s; }
+
+/* --- KEYFRAMES --- */
+@keyframes showlightgreen {
+  0% { max-height: 0; box-shadow: 0 0 0 0 #87c054; }
+  5% { box-shadow: 0 0 4px 2px #87c054; }
+  10% { max-height: 22px; }
+  80% { max-height: 22px; }
+  85% { box-shadow: 0 0 4px 2px #87c054; }
+  100% { max-height: 0; box-shadow: 0 0 0 0 #87c054; }
+}
+
+@keyframes showlightred {
+  0% { max-height: 0; box-shadow: 0 0 0 0 #f06363; }
+  20% { box-shadow: 0 0 4px 2px #f06363; }
+  25% { max-height: 22px; }
+  80% { max-height: 22px; }
+  85% { box-shadow: 0 0 4px 2px #f06363; }
+  100% { max-height: 0; box-shadow: 0 0 0 0 #f06363; }
+}
+
+@keyframes fightleft {
+  0% { transform: rotateZ(0deg); left: 0; bottom: 0; }
+  30% { transform: rotateZ(0deg); bottom: 0; }
+  40% { transform: rotateZ(45deg); left: 0; bottom: 2px; }
+  45% { transform: rotateZ(65deg); left: 0; }
+  65% { transform: rotateZ(410deg); left: 30px; bottom: 10px; }
+  95% { transform: rotateZ(410deg); left: 0; bottom: 0; }
+  100% { transform: rotateZ(360deg); left: 0; bottom: 0; }
+}
+
+@keyframes fightright {
+  0% { transform: rotateZ(0deg); right: 0; bottom: 0; }
+  30% { transform: rotateZ(0deg); bottom: 0; }
+  45% { transform: rotateZ(-45deg); right: 0; bottom: 2px; }
+  50% { transform: rotateZ(-65deg); right: 0; }
+  68% { transform: rotateZ(-410deg); right: 27px; bottom: 13px; }
+  95% { transform: rotateZ(-410deg); right: 0; bottom: 0; }
+  100% { transform: rotateZ(-360deg); right: 0; bottom: 0; }
+}
+
+@keyframes particles1 {
+  0%, 63% { background-color: rgba(51, 51, 51,0); transform: rotateZ(35deg) translateY(0px); }
+  64% { background-color: rgba(255, 255, 255,1); transform: rotateZ(35deg) translateY(0px); }
+  100% { background-color: rgba(51, 51, 51,0); transform: rotateZ(35deg) translateY(-30px); }
+}
+
+@keyframes particles2 {
+  0%, 63% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-65deg) translateY(0px); }
+  64% { background-color: rgba(255, 255, 255,1); transform: rotateZ(-65deg) translateY(0px); }
+  95%, 100% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-65deg) translateY(-40px); }
+}
+
+@keyframes particles3 {
+  0%, 63% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-75deg) translateY(0px); }
+  64% { background-color: rgba(255, 255, 255,1); transform: rotateZ(-75deg) translateY(0px); }
+  97%, 100% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-75deg) translateY(-35px); }
+}
+
+@keyframes particles4 {
+  0%, 63% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-25deg) translateY(0px); }
+  64% { background-color: rgba(255, 255, 255,1); transform: rotateZ(-25deg) translateY(0px); }
+  97%, 100% { background-color: rgba(51, 51, 51,0); transform: rotateZ(-25deg) translateY(-30px); }
+}
+
+@keyframes particles5 {
+  0%, 63% { background-color: rgba(51, 51, 51,0); transform: rotateZ(65deg) translateY(0px); }
+  64% { background-color: rgba(255, 255, 255,1); transform: rotateZ(65deg) translateY(0px); }
+  97%, 100% { background-color: rgba(51, 51, 51,0); transform: rotateZ(65deg) translateY(-35px); }
+}

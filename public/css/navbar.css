@@ -1,0 +1,501 @@
+/* ── TRANSLUCENT NAVBAR ── */
+html, body {
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+/* For Chrome, Safari, and Opera */
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+    display: none;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  box-sizing: border-box;
+  z-index: 100;
+  background: rgba(5, 5, 5, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.navbar .nav-right {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.navbar a {
+  color: #c0b9c0;
+  text-decoration: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #00ff41;
+}
+
+.navbar .logo {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ── PROFILE TRIGGER BUTTON (THE CIRCLE) ── */
+.profile-toggle-btn {
+    background: transparent;
+    border: 1px solid #00ff41;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Force perfect circle */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    
+    /* Center the SVG icon exactly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+}
+
+.profile-toggle-btn:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+    background: rgba(0, 255, 65, 0.05);
+    transform: scale(1.05);
+}
+
+.profile-toggle-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* ── SIDEBAR LOGIC ── */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Hidden */
+    width: 350px;
+    height: 100vh;
+    background: rgba(10, 10, 12, 0.95);
+    border-left: 1px solid #00ff41;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.sidebar.active {
+    right: 0; /* Slide in */
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.sidebar-header h2 {
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #a855f7; /* Bluish-purple */
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+.close-btn:hover {
+    color: #d8b4fe;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 1), 0 0 30px rgba(168, 85, 247, 0.6);
+    transform: rotate(90deg);
+}
+
+.sidebar-content {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    background: #00ff41;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+.user-avatar {
+    transition: all 0.4s ease;
+    cursor: default;
+}
+
+.user-avatar:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.8), 0 0 60px rgba(0, 255, 65, 0.4);
+    transform: scale(1.05);
+}
+
+.avatar-text {
+    color: #000;
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: 'Bangers', system-ui;
+}
+
+.username {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.user-role {
+    color: #888;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+
+.danger-btn {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.danger-btn:hover {
+    background: rgba(255, 77, 77, 0.1);
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.animated-delete-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255, 77, 77, 0.3); /* Subtle red border to hint at danger */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: .3s;
+  overflow: hidden;
+  position: relative;
+  margin: 10px auto 0; /* Centers it beautifully in the sidebar */
+}
+
+.delete-svgIcon {
+  width: 15px; /* Slightly larger so it's easier to see */
+  transition-duration: .3s;
+}
+
+.delete-svgIcon path {
+  fill: #ff4d4d; /* Changed from white to red to match the danger theme */
+}
+
+.animated-delete-btn:hover {
+  width: 160px; /* Slightly wider to fit the text comfortably */
+  border-radius: 50px;
+  transition-duration: .3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+  border-color: rgb(255, 69, 69);
+  box-shadow: 0 0 15px rgba(255, 69, 69, 0.4); /* Added neon glow on hover */
+}
+
+.animated-delete-btn:hover .delete-svgIcon {
+  width: 40px;
+  transition-duration: .3s;
+  transform: translateY(60%);
+}
+
+.animated-delete-btn:hover .delete-svgIcon path {
+  fill: white; /* Turns white when the background turns red */
+}
+
+.animated-delete-btn::before {
+  position: absolute;
+  top: -20px;
+  content: "Delete Account";
+  color: white;
+  transition-duration: .3s;
+  font-size: 2px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.animated-delete-btn:hover::before {
+  font-size: 14px;
+  opacity: 1;
+  transform: translateY(30px);
+  transition-duration: .3s;
+}
+
+/* ── BASE BUTTON LOGIC ── */
+.action-btn {
+  width: 100%; /* Fits the sidebar perfectly */
+  position: relative;
+  height: 3.5em;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  
+  /* Flexbox to perfectly center the text, even for the <a> tag */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; 
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Forces the text to stay ABOVE the animation masks! */
+.action-btn span {
+  position: relative;
+  z-index: 2; 
+}
+
+/* ── THE MASKS (FIXED BLACK BOX ISSUE) ── */
+.action-btn::after, 
+.action-btn::before {
+  content: "";
+  position: absolute;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  
+  /* THIS FIXES THE BLACK BOXES: It matches your sidebar's dark background exactly */
+  background-color: #0a0a0c; 
+  
+  transition: 0.5s;
+  transform-origin: center;
+  z-index: 1; /* Sits above the border, but below the text */
+}
+
+.action-btn::after {
+  top: -10px;
+}
+
+.action-btn::before {
+  top: 80%;
+}
+
+.action-btn:hover::before, 
+.action-btn:hover::after {
+  transform: scale(0);
+}
+
+/* ── THE 3 COLOR VARIANTS ── */
+
+/* 1. Edit Profile (Blue) */
+.btn-blue {
+  border: 3px ridge #149CEA;
+}
+.btn-blue:hover {
+  box-shadow: inset 0px 0px 25px #1479EA;
+  color: #149CEA;
+}
+
+/* 2. Change Password (Green) */
+.btn-green {
+  border: 3px ridge #00ff41;
+}
+.btn-green:hover {
+  box-shadow: inset 0px 0px 25px #00ff41;
+  color: #00ff41;
+}
+
+/* 3. Logout (Pink) */
+.btn-pink {
+  border: 3px ridge #ff33b5;
+}
+.btn-pink:hover {
+  box-shadow: inset 0px 0px 25px #ff33b5 !important;
+  color: #ff33b5 !important;
+}
+
+/* ── MODAL OVERLAY (Hidden by default) ── */
+.cyber-modal-overlay {
+    display: none; /* Hidden until triggered */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ── MODAL BOX ── */
+.cyber-modal {
+    background: #111;
+    border: 1px solid #00ff41;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    border-radius: 8px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* ── FORM INPUTS ── */
+.cyber-modal .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cyber-modal label {
+    color: #888;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.cyber-modal input {
+    background: #050505;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.cyber-modal input:focus {
+    outline: none;
+    border-color: #00ff41;
+}
+
+/* ── MODAL BUTTONS ── */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #888;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cancel:hover { color: #fff; }
+
+.btn-submit {
+    background: #00ff41;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+/* 🚀 THE CYBER TOAST NOTIFICATION SYSTEM */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: none; /* Lets you click through the invisible container */
+}
+
+.cyber-toast {
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    padding: 16px 24px;
+    border-radius: 4px;
+    border-left: 4px solid;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    animation: slideInRight 0.3s ease-out forwards;
+    min-width: 250px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* The Matrix Green Success */
+.cyber-toast.success {
+    border-color: #00ff41;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+.cyber-toast.success::before { content: "SYS.MSG // "; color: #00ff41; font-weight: bold; font-family: monospace;}
+
+/* The Warning Yellow */
+.cyber-toast.warning {
+    border-color: #ffeb3b;
+    box-shadow: 0 0 15px rgba(255, 235, 59, 0.2);
+}
+.cyber-toast.warning::before { content: "WARNING // "; color: #ffeb3b; font-weight: bold; font-family: monospace;}
+
+/* The Critical Error Red */
+.cyber-toast.error {
+    border-color: #ff003c;
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+}
+.cyber-toast.error::before { content: "CRITICAL // "; color: #ff003c; font-weight: bold; font-family: monospace;}
+
+@keyframes slideInRight {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutUp {
+    to { opacity: 0; transform: translateY(-20px); }
+}

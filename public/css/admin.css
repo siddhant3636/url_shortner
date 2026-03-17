@@ -1,0 +1,267 @@
+       body {
+            background-color: #050505;
+            color: #e8f0f4;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffeb3b;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-header h1 {
+            font-family: 'Bangers', cursive;
+            color: #ffeb3b;
+            letter-spacing: 2px;
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+        }
+
+        .admin-header h1 span { color: #fff; }
+
+        .btn-exit {
+            background: transparent;
+            color: #ff003c;
+            border: 1px solid #ff003c;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-exit:hover {
+            background: rgba(255, 0, 60, 0.1);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-left: 4px solid #00ff41;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .metric-card h3 {
+            margin: 0 0 10px 0;
+            color: #888;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ff41;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        /* Moderation Table */
+        .table-container {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #111;
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 { margin: 0; font-size: 1.2rem; color: #fff; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        th {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        td { color: #ccc; }
+        
+        .short-code { color: #00ff41; font-family: monospace; }
+        .creator { color: #ffeb3b; }
+  
+     
+
+
+
+
+
+.btn-kill-container {
+  width: 100px; /* 🚀 Increased slightly for better breathing room */
+  height: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: #E21E2C; 
+  border: 1px solid #E21E2C; 
+  border-radius: 4px; 
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.btn-kill-container .text {
+  transform: translateX(15px); 
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+.btn-kill-container .icon {
+  position: absolute;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  /* 🚀 Moved this left (from 60px to 65px) so it's not hugging the wall */
+  transform: translateX(65px); 
+  height: 100%;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E21E2C;
+  transition: 0.3s;
+}
+
+.btn-kill-container svg {
+  width: 12px;
+  fill: #fff;
+}
+
+.btn-kill-container:hover {
+  /* 🚀 Hover state matches the depth of the top-right button */
+  background: #b91521; 
+  border-color: #b91521;
+  box-shadow: 0 0 10px rgba(226, 30, 44, 0.3);
+}
+
+.btn-kill-container:hover .icon {
+  width: 100px;
+  border-left: none;
+  transform: translateX(0);
+}
+
+/* ── CREATOR COLUMN LAYOUT ── */
+.creator-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── ANIMATED BIN BUTTON ── */
+.deleteButton {
+  width: 35px; /* Slightly smaller for table use */
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  /* 🚀 overflow: visible is required for the tooltip to work! */
+}
+
+.deleteButton svg {
+  width: 16px;
+}
+
+.deleteButton:hover {
+  background-color: #E21E2C; /* Using your Crimson match color */
+}
+
+.bin path {
+  transition: all 0.2s;
+}
+
+.deleteButton:hover .bin path {
+  fill: #fff;
+}
+
+.deleteButton:active {
+  transform: scale(0.9);
+}
+
+.tooltip {
+  --tooltip-color: #1a1a1a;
+  position: absolute;
+  top: -45px;
+  background-color: var(--tooltip-color);
+  color: white;
+  border-radius: 5px;
+  font-size: 11px;
+  padding: 5px 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  content: "";
+  background-color: var(--tooltip-color);
+  bottom: -4px;
+  left: calc(50% - 4px);
+}
+
+.deleteButton:hover .tooltip {
+  opacity: 1;
+  top: -50px;
+}
+
+.short-code a, .short-code a:visited {
+    text-decoration: none;
+    font-family: monospace;
+    font-weight: bold;
+    /* The inline style in EJS will handle the specific color */
+}
+
+.short-code a:hover {
+    filter: brightness(1.2);
+    text-shadow: 0 0 8px currentColor;
+}

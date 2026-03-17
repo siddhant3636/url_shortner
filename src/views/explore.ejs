@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - siddhant36.in</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/explore.css">
+</head>
+<body>
+    
+    <div class="dark-circuit-wrapper">
+      <div class="dark-circuit-background"></div>
+    </div>
+    <%- include("partials/navbar") %>
+
+    <div class="explore-container">
+       <div class="header-section">
+            <h1 class="bangers-regular">Trending <span>Network</span></h1>
+            <p>Discover the most active nodes in the community.</p>
+        </div>
+
+        <div class="community-grid">
+            <% if (links && links.length > 0) { %>
+                <% links.forEach(link => { %>
+                    <div class="animated-cyber-card">
+                        <div class="content">
+                            <div class="card-header">
+                                <span class="creator">@<%= link.createdBy ? link.createdBy.username : 'Anonymous' %></span>
+                                <span class="click-count">🔥 <%= link.clicks %></span>
+                            </div>
+                            
+                            <div class="card-body">
+                                <a href="<%= link.originalUrl %>" target="_blank" class="original-url" title="<%= link.originalUrl %>">
+                                    <%= link.originalUrl %>
+                                </a>
+                            </div>
+                            
+                            <div class="card-footer">
+                                <a href="/api/url/<%= link.shortCode %>" target="_blank" class="short-link" data-fullurl="http://<%= currentDomain %>/api/url/<%= link.shortCode %>">
+                                    /<%= link.shortCode %>
+                                </a>
+                                <a href="/api/url/<%= link.shortCode %>/analytics" class="analytics-link">
+                                    View Stats &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div style="color: #ff33b5; text-align: center; width: 100%;">No public nodes found.</div>
+            <% } %>
+            
+        </div>
+    </div>
+
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/explore.js"></script>
+</body>
+</html>

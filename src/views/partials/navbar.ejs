@@ -1,0 +1,98 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="/" class="logo">siddhant36.in</a>
+  </div>
+
+  <div class="nav-right">
+      <a href="/api/url/explore" style="margin-right: 15px; font-weight: bold; color: #e8f0f4;">
+        Explore Urls
+      </a>
+  
+      <button id="profileBtn" class="profile-toggle-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ff41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+  </div>
+
+  <div id="profileSidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h2>Developer Profile</h2>
+      <button id="closeSidebar" class="close-btn">&times;</button>
+    </div>
+    
+    <div class="sidebar-content">
+      <div class="user-avatar">
+        <span class="avatar-text">
+          <%= user && user.username ? user.username.charAt(0).toUpperCase() : '?' %>
+        </span>
+      </div>
+      
+      <h3 class="username" id="displayUsername">
+        <%= user && user.username ? user.username : 'Developer' %>
+      </h3>
+      
+      <p class="user-role">Backend Developer</p>
+      
+      <div class="sidebar-actions" style="display: flex; flex-direction: column; gap: 15px; align-items: center; width: 100%;">
+        
+        <button class="action-btn btn-blue" onclick="openModal('editProfileModal')">
+          <span>Edit Profile</span>
+        </button>
+        
+        <button class="action-btn btn-green" onclick="openModal('changePasswordModal')">
+          <span>Change Password</span>
+        </button>
+        
+        <a href="/api/auth/logout" class="action-btn btn-pink">
+          <span>Logout</span>
+        </a>
+    
+        <button id="deleteAccountBtn" class="animated-delete-btn">
+          <svg viewBox="0 0 448 512" class="delete-svgIcon">
+            <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+          </svg>
+        </button> 
+      </div>
+    </div>
+  </div>
+
+  <div id="sidebarOverlay" class="overlay"></div>
+  
+  <div id="editProfileModal" class="cyber-modal-overlay">
+    <div class="cyber-modal">
+        <h2 class="bangers-regular">Edit <span>Profile</span></h2>
+        <form id="editProfileForm">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="editUsername" value="<%= locals.user ? locals.user.username : '' %>" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('editProfileModal')">Cancel</button>
+                <button type="submit" class="btn-submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+  </div>
+
+  <div id="changePasswordModal" class="cyber-modal-overlay">
+    <div class="cyber-modal">
+        <h2 class="bangers-regular">Change <span>Password</span></h2>
+        <form id="changePasswordForm">
+            <div class="input-group">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" required>
+            </div>
+            <div class="input-group">
+                <label>New Password</label>
+                <input type="password" id="newPassword" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal('changePasswordModal')">Cancel</button>
+                <button type="submit" class="btn-submit">Update Password</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</nav>

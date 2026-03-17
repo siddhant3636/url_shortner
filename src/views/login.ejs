@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+  
+<form class="form" id="loginForm">
+
+  <% if (locals.adminMode) { %>
+      <input type="hidden" id="adminAttempt" value="true">
+      
+      <div id="loader">
+        <div class="ls-particles ls-part-1"></div>
+        <div class="ls-particles ls-part-2"></div>
+        <div class="ls-particles ls-part-3"></div>
+        <div class="ls-particles ls-part-4"></div>
+        <div class="ls-particles ls-part-5"></div>
+        <div class="lightsaber ls-left ls-green"></div>
+        <div class="lightsaber ls-right ls-red"></div>
+      </div> 
+      <h1 style="color: #ffeb3b; text-align: center; font-family: 'Bangers'; letter-spacing: 2px;">
+        SYSTEM <span style="color: #fff;">OVERRIDE</span>
+      </h1>
+  <% } else { %>
+      <h1 class="logo" style="text-align: center;">Welcome Back</h1>
+  <% } %>
+
+  <span class="input-span">
+    <label for="email" class="label">Email</label>
+    <input type="email" name="email" id="email" required />
+  </span>
+
+  <span class="input-span">
+    <label for="password" class="label">Password</label>
+    <input type="password" name="password" id="password" required />
+  </span>
+
+  <input class="submit" type="submit" id="submitBtn" value="Log in" />
+
+  <% if (!locals.adminMode) { %>
+      <span class="span">
+        Don't have an account? <a href="/api/auth/signup">Sign up</a>
+      </span>
+  <% } %>
+
+</form>
+
+<script>
+    window.showToast = function(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = `cyber-toast ${type}`;
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'fadeOutUp 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Check if the hidden admin flag exists on the page
+        const adminAttempt = document.getElementById('adminAttempt') ? true : false;
+
+        submitBtn.value = "Authenticating...";
+        submitBtn.style.opacity = "0.7";
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, adminAttempt })
+            });
+            
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            const data = await response.json();
+            if (!response.ok) {
+                showToast(data.message || "Authentication failed.", "error");
+                submitBtn.value = "Log in";
+                submitBtn.style.opacity = "1";
+            }
+        } catch (err) {
+            showToast("Server connection lost.", "error");
+            submitBtn.value = "Log in";
+            submitBtn.style.opacity = "1";
+        }
+    });
+</script>
+
+</body>
+</html>

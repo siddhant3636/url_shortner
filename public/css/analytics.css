@@ -1,0 +1,146 @@
+ @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@100..900&family=Prata&display=swap');
+
+ body {
+    background-color: #050505;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.analytics-container {
+    max-width: 1100px;
+    margin: 120px auto 50px;
+    padding: 0 20px;
+}
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.header-section h1 {
+    color: #00ff41;
+    font-family: 'Bangers', system-ui;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    margin: 0 0 10px 0;
+}
+.header-section a {
+    color: #ff88ee; /* A bright, almost-white pink for the core of the text */
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    
+    /* THE NEON GLOW TRICK: Stacking multiple blurred shadows */
+    text-shadow: 
+        0 0 5px #cf30aa, 
+        0 0 15px #cf30aa, 
+        0 0 25px #ff00a0;
+    
+    transition: all 0.3s ease-in-out;
+}
+.header-section a:hover {
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px #cf30aa, 
+        0 0 20px #ff00a0, 
+        0 0 40px #ff00a0, 
+        0 0 60px #ff00a0;
+}
+/* The Dark Glass Cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+.card {
+    background: rgba(15, 15, 20, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.card-title {
+    color: #888;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0;
+}
+.stat-huge {
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    margin: 10px 0;
+}
+.chart-wrapper {
+    position: relative;
+    height: 250px;
+    width: 100%;
+}
+.full-width {
+    grid-column: 1 / -1;
+
+}
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; 
+  height: 100vh; 
+  z-index: -1; 
+
+
+  background: #121212; 
+  background: linear-gradient(
+    135deg,
+    #121212 25%,
+    #1a1a1a 25%,
+    #1a1a1a 50%,
+    #121212 50%,
+    #121212 75%,
+    #1a1a1a 75%,
+    #1a1a1a
+  );
+  background-size: 40px 40px;
+  animation: move 4s linear infinite;
+}
+
+@keyframes move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+
+
+
+
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.bangers-regular {
+    margin: 0 0 10px 0; 
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    
+    /* 🚀 Forces 'Performance' to be White */
+    color: #ffffff !important; 
+    
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+}
+
+.bangers-regular span {
+    /* 🚀 Only 'Analytics' becomes Green */
+    color: #00ff41 !important; 
+}
+
+

@@ -1,0 +1,254 @@
+/* ── FONTS ── */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@100..900&family=Prata&display=swap');
+
+/* ── BASE LAYOUT ── */
+body {
+    background-color: #050505;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding-top: 90px; /* Accounts for the fixed navbar */
+}
+
+.explore-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* ── CUSTOM TITLE STYLING ── */
+.bangers-regular {
+    margin: 0 0 10px 0; 
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #ffffff;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+}
+
+.bangers-regular span {
+    color: #00ff41;
+}
+
+.header-section p {
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* ── THE GRID ── */
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px; /* Slightly larger gap to let the neon glow breathe */
+}
+
+/* ── ANIMATED CYBER CARDS (UIVERSE) ── */
+.animated-cyber-card {
+    width: 100%; 
+    min-height: 180px;
+    background: #171717;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    padding: 2px; /* Creates the track for the rotating gradient */
+}
+
+/* The inner container holding your data */
+.animated-cyber-card .content {
+    border-radius: 6px; 
+    background: #171717;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2; /* Keeps text above the rotating gradient */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+/* Subtle inner white glow on hover */
+.animated-cyber-card .content::before {
+    opacity: 0;
+    transition: opacity 300ms;
+    content: " ";
+    display: block;
+    background: white;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    filter: blur(50px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.animated-cyber-card:hover .content::before {
+    opacity: 0.05; /* Kept very low so text remains readable */
+}
+
+/* The rotating gradient beam */
+.animated-cyber-card::before {
+    opacity: 0;
+    content: " ";
+    position: absolute;
+    display: block;
+    width: 200%; /* Oversized so corners don't clip while spinning */
+    height: 200%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #ff33b5, /* Hot pink */
+        #149CEA, /* Blue */
+        transparent
+    );
+    transition: opacity 300ms;
+    animation: rotation_9018 3000ms infinite linear;
+    animation-play-state: paused;
+    z-index: 1; 
+}
+
+.animated-cyber-card:hover::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+/* Dark backdrop to smooth the gradient */
+.animated-cyber-card::after {
+    position: absolute;
+    content: " ";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(23, 23, 23, 0.4);
+    backdrop-filter: blur(50px);
+    z-index: 1;
+}
+
+@keyframes rotation_9018 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ── INNER CARD CONTENT STYLES ── */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 10px;
+}
+
+.creator {
+    color: #ff33b5;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.click-count {
+    color: #00ff41;
+    font-weight: bold;
+    font-size: 0.9rem;
+    background: rgba(0, 255, 65, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.original-url {
+    color: #c0b9c0;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+}
+
+.original-url:hover {
+    color: #fff;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.short-link {
+    color: #149CEA;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    z-index: 3; /* Ensures it is clickable over the card animations */
+}
+
+.short-link:hover {
+    text-decoration: underline;
+}
+
+.analytics-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+    position: relative;
+    z-index: 3;
+}
+
+.analytics-link:hover {
+    color: #00ff41;
+}
+
+.dark-circuit-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    
+    /* 🚀 Layer 1: Small subtle grid */
+    background-image: 
+        linear-gradient(rgba(0, 255, 65, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* 🚀 Layer 2: Larger, brighter grid for depth */
+.dark-circuit-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(0, 255, 65, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.15) 1px, transparent 1px);
+    background-size: 200px 200px; /* Big squares */
+    z-index: -1;
+}
+
+/* 🚀 Enhanced radial glow to make the center content pop */
+.dark-circuit-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center, 
+        rgba(0, 255, 65, 0.03) 0%, /* Very subtle green tint in center */
+        rgba(5, 5, 5, 0.9) 80%     /* Deep black fade at edges */
+    );
+}
