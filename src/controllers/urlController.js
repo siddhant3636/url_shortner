@@ -1,11 +1,20 @@
 import urlModel from "../models/urlModel.js";
+import Counter from "../models/counterModel.js";
 import useragent from "useragent";
 import redisClient from '../configs/redis.js';
 
 const DOMAIN = process.env.BASE_URL || "http://localhost:3000";
 const BASE62_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-
+const encodeBase62 = (num) => {
+  if (num === 0) return BASE62_ALPHABET[0];
+  let encodedString = "";
+  while (num > 0) {
+    encodedString = BASE62_ALPHABET[num % 62] + encodedString;
+    num = Math.floor(num / 62);
+  }
+  return encodedString;
+};
 
 
 
@@ -22,7 +31,44 @@ const getNextSequenceValue = async (sequenceName) => {
 const createShortUrl = async (req, res) => {
   try {
     const { originalUrl } = req.body;
+    const userId = req.session?.user?.id || req.ip; // Fallback to IP if not logged in
 
+    //  LAYER 1: REDIS IDEMPOTENCY LOCK (The Network Bouncer)
+    // Create a unique signature for this specific request.
+    const idempotencyKey = `lock:create_url:${userId}:${originalUrl}`;
+    
+    // Check if this user is already trying to shorten this exact URL right now
+    const isLocked = await redisClient.get(idempotencyKey);
+    if (isLocked) {
+        return res.status(429).json({ 
+            message: "System cooling down. Duplicate request blocked." 
+        });
+    }
+
+    // Lock the request in Redis for 5 seconds. 
+    // If your brother clicks 10 times in 5 seconds, 9 of them hit the wall above.
+    await redisClient.setEx(idempotencyKey, 5, "LOCKED");
+
+    //  LAYER 2: MONGODB DEDUPLICATION (The Long-Term Memory)
+    if (req.session?.user?.id) {
+        const existingUrl = await urlModel.findOne({ 
+            originalUrl: originalUrl, 
+            createdBy: req.session.user.id,
+            isDeleted: false 
+        });
+
+        if (existingUrl) {
+            // Remove the Redis lock early since we are done
+            await redisClient.del(idempotencyKey);
+            
+            return res.status(200).json({
+                shortUrl: `${DOMAIN}/api/url/${existingUrl.shortCode}`,
+                shortCode: existingUrl.shortCode,
+                _id: existingUrl._id,
+                message: "Retrieved existing link"
+            });
+        }
+    }
     // 1. Get a mathematically guaranteed unique integer
     const uniqueId = await getNextSequenceValue('urlId');
 
@@ -44,10 +90,9 @@ const createShortUrl = async (req, res) => {
     await redisClient.setEx(`url:${shortCode}`, 86400, originalUrl);
 
     return res.status(201).json({
-      // Make sure BASE_URL is defined in your .env or file
       shortUrl: `${DOMAIN}/api/url/${shortCode}`,
       shortCode,
-      _id: url._id // 🚀 IMPORTANT: Returning _id so the frontend delete button works
+      _id: url._id //  Returning _id so the frontend delete button works
     });
 
   } catch (err) {
@@ -67,7 +112,7 @@ const redirectUrl = async (req, res) => {
     const country = req.headers["cf-ipcountry"] || "Unknown";
     const cacheKey = `url:${shortCode}`;
 
-    // 📦 Define the heavy database update payload ONCE
+    // Define the heavy database update payload ONCE
     const analyticsUpdate = {
       $inc: { clicks: 1 },
       $set: { lastAccessed: new Date() },
@@ -81,7 +126,7 @@ const redirectUrl = async (req, res) => {
       }
     };
 
-    // 🚀 1. THE CACHE HIT (Lightning Fast Redirect)
+    // 1. THE CACHE HIT (Lightning Fast Redirect)
     const cachedUrl = await redisClient.get(cacheKey);
 
     if (cachedUrl) {
@@ -92,7 +137,7 @@ const redirectUrl = async (req, res) => {
       return res.redirect(cachedUrl);
     }
 
-    // 🐢 2. THE CACHE MISS (Database Query)
+    //  2. THE CACHE MISS (Database Query)
     // We update the analytics AND get the document back in one trip to the database
     const url = await urlModel.findOneAndUpdate(
       { shortCode, isDeleted: false },
@@ -105,7 +150,7 @@ const redirectUrl = async (req, res) => {
       return res.status(404).json({ message: "System Reject: URL not found or terminated." });
     }
 
-    // 🚀 3. REPOPULATE CACHE
+    //  3. REPOPULATE CACHE
     // Save it in Redis for 24 hours (86400 seconds) so the next click is instant
     await redisClient.setEx(cacheKey, 86400, url.originalUrl);
 
@@ -204,7 +249,7 @@ const deleteUrl = async (req, res) => {
       return res.status(404).json({ success: false, message: "System Reject: URL not found." });
     }
 
-    // 💥 CACHE INVALIDATION
+    // CACHE INVALIDATION
     // Actively destroy the cache key so the link instantly dies on the internet
     await redisClient.del(`url:${url.shortCode}`);
 

@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
 
-// 🚀 1. The Error Catcher
+//  1. The Error Catcher
 // This checks the results of the rules below. If a rule fails, it blocks the request.
 export const validateRequest = (req, res, next) => {
     const errors = validationResult(req);
@@ -14,7 +14,7 @@ export const validateRequest = (req, res, next) => {
     next();
 };
 
-// 🚀 2. URL Shortening Rules
+//  2. URL Shortening Rules
 export const validateUrlCreation = [
     body('originalUrl')
         .trim()
@@ -23,7 +23,7 @@ export const validateUrlCreation = [
         .withMessage('System Reject: Invalid URL format. Protocol (http:// or https://) required.')
 ];
 
-// 🚀 3. Auth (Signup/Profile) Rules
+//  3. Auth (Signup/Profile) Rules
 export const validateAuth = [
     body('username')
         .trim()
@@ -37,4 +37,12 @@ export const validateAuth = [
         .normalizeEmail(), // Converts SIddhant@GMAIL.com to siddhant@gmail.com
     body('password')
         .isLength({ min: 6 }).withMessage('Security Policy: Password must be at least 6 characters.')
+];
+export const validateUpdateProfile = [
+    body('username')
+        .notEmpty().withMessage('Username cannot be empty')
+        .isLength({ min: 3 }).withMessage('Username must be at least 3 characters')
+        .trim(),
+    
+    // Notice what is NOT here: The password validation!
 ];

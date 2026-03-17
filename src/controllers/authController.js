@@ -6,7 +6,7 @@ const loginPage = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-    // 🚀 1. Extract the new adminAttempt flag
+    // 1. Extract the new adminAttempt flag
     const { email, password, adminAttempt } = req.body;
 
     if(!email || !password) {
@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
         return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // 🚀 2. THE ADMIN GATEKEEPER
+    // 2. THE ADMIN GATEKEEPER
     // If they used the God Mode portal, but aren't an admin, kick them out!
     if (adminAttempt && user.role !== 'admin') {
         return res.status(403).json({ message: "Restricted System: Admin privileges required." });
@@ -87,7 +87,7 @@ const logoutUser = async (req, res) => {
     });
 };
 
-// --- MOVED FROM USER CONTROLLER ---
+
 
 const updateUser = async (req, res) => {
     try {
@@ -180,6 +180,6 @@ const checkUsername = async (req, res) => {
     }
 };
 
-// Don't forget to add checkUsername to your export at the bottom of the file!
+
 
 export { loginPage, loginUser, signupPage, signupUser, logoutUser, updateUser, changePassword, deleteUser, checkUsername };

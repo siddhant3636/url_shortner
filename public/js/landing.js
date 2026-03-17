@@ -1,6 +1,6 @@
 // 1. MATRIX BACKGROUND LOGIC
 const container = document.getElementById('matrixContainer');
-if (container) { // Added a safety check just in case
+if (container) { 
     for (let p = 0; p < 5; p++) {
       const pattern = document.createElement('div');
       pattern.className = 'matrix-pattern';
@@ -13,22 +13,35 @@ if (container) { // Added a safety check just in case
     }
 }
 
-// 2. URL SHORTENING LOGIC (Optimized & Alert-Free)
+// 2. URL SHORTENING LOGIC 
 const filterIcon = document.getElementById('filter-icon');
 const urlInput = document.getElementById('urlInput');
 
-// Extracted into a function so both the Button and the 'Enter' key can use it
+//  FRONTEND LOCK: State flag to track if a request is already running
+let isSubmitting = false; 
+
 async function handleUrlSubmit(e) {
     if (e) e.preventDefault(); 
     
+    //  FRONTEND LOCK: If they click while it's already running, ignore it completely
+    if (isSubmitting) return; 
+
     const originalUrl = urlInput.value.trim();
 
     if (!originalUrl) {
-      return showToast("Please enter a valid URL first.", "warning"); // 🚀 Replaced alert
+      return showToast("Please enter a valid URL first.", "warning"); 
+    }
+
+    //  FRONTEND LOCK: Activate the lock visually and functionally
+    isSubmitting = true;
+    urlInput.disabled = true; // Stops them from typing or mashing Enter
+    if (filterIcon) {
+        filterIcon.style.opacity = '0.4';
+        filterIcon.style.pointerEvents = 'none'; // Makes the button unclickable
+        filterIcon.style.cursor = 'wait';
     }
 
     try {
-      // Note: Ensure this matches your actual backend route! (e.g., /api/url or /api/url/shorten)
       const response = await fetch('/api/url', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,15 +69,34 @@ async function handleUrlSubmit(e) {
         `;
         
         urlInput.value = ''; 
-        showToast("Link successfully generated.", "success"); // 🚀 Added success toast
+        
+        //  If your backend returns a 200 instead of 201, it means idempotency worked!
+        if (response.status === 200) {
+            showToast("Existing link retrieved from database.", "success");
+        } else {
+            showToast("Link successfully generated.", "success"); 
+            setTimeout(() => {
+            window.location.reload();
+            }, 5000);
+        }
         
       } else {
-        showToast(data.message || "Failed to shorten link.", "error"); // 🚀 Replaced alert
+        showToast(data.message || "Failed to shorten link.", "error"); 
       }
 
     } catch (err) {
       console.error("Error creating URL:", err);
-      showToast("Network connection lost. Please try again.", "error"); // 🚀 Replaced alert
+      showToast("Network connection lost. Please try again.", "error"); 
+    } finally {
+        // No matter what happens (success or error), unlock the system
+        isSubmitting = false;
+        urlInput.disabled = false;
+        if (filterIcon) {
+            filterIcon.style.opacity = '1';
+            filterIcon.style.pointerEvents = 'auto';
+            filterIcon.style.cursor = 'pointer';
+        }
+        urlInput.focus(); // Puts their cursor back in the box automatically
     }
 }
 
@@ -116,7 +148,7 @@ window.copyDashboardUrl = function(btn) {
     });
 }
 
-// 5. DELETE URL LOGIC (Cleaned up old redundant code)
+// 5. DELETE URL LOGIC 
 let urlToDeleteId = null;
 
 window.triggerDeleteWarning = function(urlId) {
@@ -148,15 +180,15 @@ if (confirmUrlDeleteBtn) {
                     setTimeout(() => card.remove(), 300);
                 }
                 
-                showToast("Link permanently terminated.", "success"); // 🚀 Already perfectly using Toast
+                showToast("Link permanently terminated.", "success"); 
             } else {
                 const data = await response.json();
-                showToast(data.message || "Failed to terminate link.", "error"); // 🚀 Replaced alert
+                showToast(data.message || "Failed to terminate link.", "error"); 
                 confirmUrlDeleteBtn.innerText = originalText;
             }
         } catch (err) {
             console.error("Delete Error:", err);
-            showToast("Lost connection to the network.", "error"); // 🚀 Replaced alert
+            showToast("Lost connection to the network.", "error"); 
             confirmUrlDeleteBtn.innerText = originalText;
         }
     });

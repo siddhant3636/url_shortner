@@ -48,7 +48,7 @@ const deleteUserByAdmin = async (req, res) => {
             return res.status(404).json({ message: "User node not found." });
         }
 
-        // Optional: You might also want to soft-delete all their URLs too
+        
         await urlModel.updateMany({ createdBy: userId }, { isDeleted: true });
 
         res.json({ message: "User and all associated links deactivated." });

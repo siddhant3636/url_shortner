@@ -13,6 +13,12 @@
   import urlModel from './src/models/urlModel.js';
   import { mongoSanitizer } from './src/middleware/mongoSanitizer.js';
 
+  import path from 'path';
+  import { fileURLToPath } from 'url';
+
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
 
   const app = express();
   const PORT = 3000;
@@ -52,12 +58,13 @@ app.use(session({
 
   
 
-  app.use(express.static("public"));
+ 
  
 
   //set ejs
-  app.set("view engine", "ejs");
-  app.set("views", "./src/views");
+  app.set('views', path.join(__dirname, 'src', 'views')); 
+  app.set('view engine', 'ejs');
+  app.use(express.static(path.join(__dirname, 'public')));
 
   
   app.use((req, res, next) => {
